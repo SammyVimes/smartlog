@@ -348,4 +348,36 @@ public class SmartLogTest {
         assertThat(SmartLog.current()).isSameAs(outer);
         SmartLog.finish();
     }
+
+    @Test
+    public void testLogAndThrow() {
+        SmartLog.start(output);
+
+        final LogContext ctx = SmartLog.start(output);
+
+        final Exception exception = new Exception();
+
+        ctx.result(LogLevel.ERROR, exception, "Exception will be thrown");
+
+        ctx.throwable(exception);
+
+        output.write(ctx);
+    }
+
+    @Test
+    public void testLogAndThrowAnotherException() {
+        SmartLog.start(output);
+
+        final LogContext ctx = SmartLog.start(output);
+
+        final Exception exception = new Exception();
+        final Exception exception2 = new Exception(exception);
+
+        ctx.result(LogLevel.ERROR, exception, "Exception will be thrown");
+
+        ctx.throwable(exception2);
+
+        output.write(ctx);
+    }
+
 }

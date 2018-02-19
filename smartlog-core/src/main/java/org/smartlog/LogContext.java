@@ -229,7 +229,11 @@ public class LogContext implements AutoCloseable {
     }
 
     public LogContext throwable(@Nonnull final Throwable newThrowable) {
-        if (throwable != null) {
+        if (throwable != null && throwable != newThrowable) {
+            if (suppressedThrowables != null && suppressedThrowables.contains(newThrowable)) {
+                return this;
+            }
+
             if (suppressedThrowables == null) {
                 suppressedThrowables = new ArrayList<>(1);
             }
