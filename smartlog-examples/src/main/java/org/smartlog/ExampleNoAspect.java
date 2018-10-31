@@ -18,10 +18,13 @@ public class ExampleNoAspect {
                 .title("main");
 
         try {
-            SmartLog.trace("test");
-            SmartLog.trace("hello %s", "alice");
+            SmartLog.append("test");
+            SmartLog.append("hello %s", "alice");
 
-            SmartLog.attach("var", 5);
+            SmartLog.put("var", 5);
+            SmartLog.ifDebug("debug");
+            SmartLogConfig.getConfig().setWriteSensitiveData(true);
+            SmartLog.sensitive("sensitive data");
 
             SmartLog.result("OK");
 
@@ -32,10 +35,10 @@ public class ExampleNoAspect {
 
     public static void example2() {
         try (LogContext log = SmartLog.start(SL_OUTPUT).title("main")) {
-            log.trace("test");
-            log.trace("hello %s", "alice");
+            log.append("test");
+            log.append("hello %s", "alice");
 
-            log.attach("var", 5);
+            log.put("var", 5);
 
             log.result("OK");
         }

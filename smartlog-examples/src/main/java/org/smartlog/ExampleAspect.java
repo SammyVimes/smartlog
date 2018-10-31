@@ -27,13 +27,19 @@ public class ExampleAspect implements LoggableCallback {
     public static void example3() {
         SmartLog.title("Custom title");
 
-        SmartLog.trace(MARK_TIME, "make request to...");
+        SmartLog.append(MARK_TIME, "make request to...");
         // request remote server
-        SmartLog.trace(WRITE_TIME, "got result %d", 42);
+        SmartLog.append(WRITE_TIME, "got result %d", 42);
 
-        SmartLog.trace("try parse");
+        SmartLog.append("try parse");
         // parse
-        SmartLog.trace("ok");
+        SmartLog.append("ok");
+
+        // when log debug enabled
+        SmartLog.ifDebug("debug data");
+
+        // when system property smartlog.writeSensitiveData=true
+        SmartLog.sensitive("sensitive data");
 
         SmartLog.result("custom result");
     }

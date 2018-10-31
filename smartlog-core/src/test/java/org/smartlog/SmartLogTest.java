@@ -40,11 +40,11 @@ public class SmartLogTest {
                 .level(LogLevel.DEBUG)
                 .title("test-%s", "title")
                 .format(new SimpleTextFormat("${title} - ${result}, var=${var}, trace: [${trace}] [${time} ms]"))
-                .trace("trace1")
-                .trace("trace2")
-                .trace(WRITE_TIME, "trace3")
-                .trace("trace%d", 4)
-                .attach("var", "val")
+                .append("trace1")
+                .append("trace2")
+                .append(WRITE_TIME, "trace3")
+                .append("trace%d", 4)
+                .put("var", "val")
                 .result("test-result");
 
         SmartLog.finish();
@@ -63,14 +63,28 @@ public class SmartLogTest {
         SmartLog.format(new SimpleTextFormat("${title} - ${result}, var=${var}, trace: [${trace}] [${time} ms]"));
         SmartLog.level(LogLevel.DEBUG);
         SmartLog.title("test-title");
-        SmartLog.attach("var", "val");
-        SmartLog.trace("trace1");
-        SmartLog.trace("trace2");
-        SmartLog.trace(TraceFlag.MARK_TIME, "trace3");
-        SmartLog.trace(TraceFlag.WRITE_TIME, "trace4");
-        SmartLog.trace(TraceFlag.WRITE_AND_MARK_TIME, "trace5");
-        SmartLog.trace("trace%d", 6);
-        SmartLog.trace(TraceFlag.MARK_TIME, "trace%d", 7);
+        SmartLog.put("var", "val");
+        SmartLog.append("trace1");
+        SmartLog.append("trace2");
+        SmartLog.append(TraceFlag.MARK_TIME, "trace3");
+        SmartLog.append(TraceFlag.WRITE_TIME, "trace4");
+        SmartLog.append(TraceFlag.WRITE_AND_MARK_TIME, "trace5");
+        SmartLog.append("trace%d", 6);
+        SmartLog.append(TraceFlag.MARK_TIME, "trace%d", 7);
+        when(logger.isDebugEnabled()).thenReturn(false);
+        SmartLog.ifDebug("debug0");
+        when(logger.isDebugEnabled()).thenReturn(true);
+        SmartLog.ifDebug("debug1");
+        SmartLog.ifDebug("debug%s", 2);
+        SmartLog.ifDebug(TraceFlag.NONE, "debug%s", 3);
+        SmartLog.ifDebug(TraceFlag.WRITE_TIME, "debug4");
+        SmartLog.sensitive("sensitive1");
+        SmartLogConfig.getConfig().setWriteSensitiveData(true);
+        SmartLog.sensitive("sensitive2");
+        SmartLog.sensitive("sensitive%s", 3);
+        SmartLog.sensitive(TraceFlag.NONE, "sensitive4");
+        SmartLog.sensitive(TraceFlag.WRITE_TIME, "sensitive%s", 5);
+
         SmartLog.result("test-result");
 
         Thread.sleep(5);
@@ -81,7 +95,7 @@ public class SmartLogTest {
         Mockito.verify(logger).debug(msgCaptor.capture());
 
         Assertions.assertThat(msgCaptor.getValue())
-                .matches("test-title - test-result, var=val, trace: \\[trace1; trace2; trace3; trace4 \\[\\d+ ms\\]; trace5 \\[\\d+ ms\\]; trace6; trace7\\] \\[\\d+ ms\\]");
+                .matches("test-title - test-result, var=val, trace: \\[trace1; trace2; trace3; trace4 \\[\\d+ ms\\]; trace5 \\[\\d+ ms\\]; trace6; trace7; debug1; debug2; debug3; debug4 \\[\\d+ ms\\]; sensitive2; sensitive3; sensitive4; sensitive5 \\[\\d+ ms\\]\\] \\[\\d+ ms\\]");
     }
 
     @Test

@@ -2,11 +2,11 @@
 
 [![ci-travis](https://api.travis-ci.org/ivnik/smartlog.svg?branch=develop)](https://travis-ci.org/ivnik/smartlog)
 [![codecov](https://codecov.io/gh/ivnik/smartlog/branch/develop/graph/badge.svg)](https://codecov.io/gh/ivnik/smartlog)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.ivnik/smartlog.svg)](http://search.maven.org/#artifactdetails%7Cio.github.ivnik%7Csmartlog%7C0.0.2%7C)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.ivnik/smartlog.svg)](http://search.maven.org/#artifactdetails%7Cio.github.ivnik%7Csmartlog%7C0.0.3%7C)
 
 ## About
 
-Last version: 0.0.2
+Last version: 0.0.3
 
 TODO
 
@@ -50,20 +50,24 @@ import static org.smartlog.TraceFlag.WRITE_TIME;
 public static void example3() {
     SmartLog.title("Custom title");
 
-    SmartLog.trace(MARK_TIME, "make request to...");
+    SmartLog.append(MARK_TIME, "make request to...");
     // request remote server
-    SmartLog.trace(WRITE_TIME, "got result %d", 42);
-    
-    SmartLog.trace("try parse");
+    SmartLog.append(WRITE_TIME, "got result %d", 42);
+
+    SmartLog.append("try parse");
     // parse
-    SmartLog.trace("ok");
+    SmartLog.append("ok");
+
+    SmartLog.ifDebug("debug data");
+
+    SmartLog.sensitive("sensitive data");
 
     SmartLog.result("custom result");
 }
 ```
 log output:
 ```text
-15:07:50.918 [main] INFO org.smartlog.ExampleAspect - Custom title - [custom result], trace: [make request to...; got result 42 [2 ms]; try parse; ok] [8 ms]
+15:07:50.918 [main] INFO org.smartlog.ExampleAspect - Custom title - [custom result], make request to...; got result 42 [2 ms]; try parse; debug data; sensitive data; ok] [8 ms]
 ```
 
 ## Getting started
@@ -74,7 +78,7 @@ log output:
     <dependency>
         <groupId>io.github.ivnik</groupId>
         <artifactId>smartlog</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </dependency>
 </dependencies>
 ```
@@ -89,7 +93,7 @@ log output:
     <dependency>
         <groupId>io.github.ivnik</groupId>
         <artifactId>smartlog</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </dependency>
 </dependencies>
 <plugin>
@@ -104,7 +108,7 @@ log output:
             <aspectLibrary>
                 <groupId>io.github.ivnik</groupId>
                 <artifactId>smartlog-aop</artifactId>
-                <version>0.0.2</version>
+                <version>0.0.3</version>
             </aspectLibrary>
         </aspectLibraries>
     </configuration>
