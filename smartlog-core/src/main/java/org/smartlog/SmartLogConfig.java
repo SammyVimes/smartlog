@@ -22,9 +22,11 @@ public class SmartLogConfig {
 
     private static SmartLogConfig config = new SmartLogConfig();
 
-    private Format defaultFormat = new SimpleTextFormat("${title} - [${result}], trace: [${trace}] [${time} ms]");
+    private Format defaultFormat = new SimpleTextFormat("${title} - [${result}], ${trace}[${time} ms]");
 
     private boolean replaceCrLf = true;
+
+    private boolean writeSensitiveData = Boolean.getBoolean("smartlog.writeSensitiveData");
 
     private Function<Class, Output> defaultOutputResolver = (clazz) -> Slf4JOutput.create()
             .withLoggerFor(clazz)
@@ -48,6 +50,14 @@ public class SmartLogConfig {
 
     public boolean isReplaceCrLf() {
         return replaceCrLf;
+    }
+
+    public boolean isWriteSensitiveData() {
+        return writeSensitiveData;
+    }
+
+    public void setWriteSensitiveData(final boolean writeSensitiveData) {
+        this.writeSensitiveData = writeSensitiveData;
     }
 
     public void setReplaceCrLf(final boolean replaceCrLf) {

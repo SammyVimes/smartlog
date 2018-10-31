@@ -50,20 +50,24 @@ import static org.smartlog.TraceFlag.WRITE_TIME;
 public static void example3() {
     SmartLog.title("Custom title");
 
-    SmartLog.trace(MARK_TIME, "make request to...");
+    SmartLog.append(MARK_TIME, "make request to...");
     // request remote server
-    SmartLog.trace(WRITE_TIME, "got result %d", 42);
-    
-    SmartLog.trace("try parse");
+    SmartLog.append(WRITE_TIME, "got result %d", 42);
+
+    SmartLog.append("try parse");
     // parse
-    SmartLog.trace("ok");
+    SmartLog.append("ok");
+
+    SmartLog.ifDebug("debug data");
+
+    SmartLog.sensitive("sensitive data");
 
     SmartLog.result("custom result");
 }
 ```
 log output:
 ```text
-15:07:50.918 [main] INFO org.smartlog.ExampleAspect - Custom title - [custom result], trace: [make request to...; got result 42 [2 ms]; try parse; ok] [8 ms]
+15:07:50.918 [main] INFO org.smartlog.ExampleAspect - Custom title - [custom result], make request to...; got result 42 [2 ms]; try parse; debug data; sensitive data; ok] [8 ms]
 ```
 
 ## Getting started

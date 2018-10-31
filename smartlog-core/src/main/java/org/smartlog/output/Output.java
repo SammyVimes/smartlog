@@ -7,4 +7,6 @@ import org.smartlog.LogContext;
  */
 public interface Output {
     void write(LogContext log);
+
+    boolean isDebugEnabled();
 }

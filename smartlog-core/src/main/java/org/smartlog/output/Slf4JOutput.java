@@ -97,6 +97,11 @@ public class Slf4JOutput implements Output {
         }
     }
 
+    @Override
+    public boolean isDebugEnabled() {
+        return logger.isDebugEnabled();
+    }
+
     @Nonnull
     public Logger getLogger() {
         return logger;

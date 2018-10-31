@@ -108,8 +108,8 @@ public class SmartLog {
     }
 
     @Nonnull
-    public static LogContext attach(@Nonnull final String name, @Nullable final Object value) {
-        return current().attach(name, value);
+    public static LogContext put(@Nonnull final String name, @Nullable final Object value) {
+        return current().put(name, value);
     }
 
     @Nonnull
@@ -118,23 +118,63 @@ public class SmartLog {
     }
 
     @Nonnull
-    public static LogContext trace(final String msg) {
-        return current().trace(msg);
+    public static LogContext append(final String msg) {
+        return current().append(msg);
     }
 
     @Nonnull
-    public static LogContext trace(final String format, final Object... args) {
-        return current().trace(format, args);
+    public static LogContext append(final String format, final Object... args) {
+        return current().append(format, args);
     }
 
     @Nonnull
-    public static LogContext trace(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
-        return current().trace(flag, msg);
+    public static LogContext append(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return current().append(flag, msg);
     }
 
     @Nonnull
-    public static LogContext trace(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
-        return current().trace(flag, msg, args);
+    public static LogContext append(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return current().append(flag, msg, args);
+    }
+
+    @Nonnull
+    public static LogContext ifDebug(final String msg) {
+        return current().ifDebug(msg);
+    }
+
+    @Nonnull
+    public static LogContext ifDebug(final String format, final Object... args) {
+        return current().ifDebug(format, args);
+    }
+
+    @Nonnull
+    public static LogContext ifDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return current().ifDebug(flag, msg);
+    }
+
+    @Nonnull
+    public static LogContext ifDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return current().ifDebug(flag, msg, args);
+    }
+
+    @Nonnull
+    public static LogContext sensitive(final String msg) {
+        return current().sensitive(msg);
+    }
+
+    @Nonnull
+    public static LogContext sensitive(final String format, final Object... args) {
+        return current().sensitive(format, args);
+    }
+
+    @Nonnull
+    public static LogContext sensitive(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return current().sensitive(flag, msg);
+    }
+
+    @Nonnull
+    public static LogContext sensitive(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return current().sensitive(flag, msg, args);
     }
 
     @Nonnull

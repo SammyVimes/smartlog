@@ -170,7 +170,7 @@ public class LogContext implements AutoCloseable {
     }
 
     @Nonnull
-    public LogContext attach(@Nonnull final String name, @Nullable final Object value) {
+    public LogContext put(@Nonnull final String name, @Nullable final Object value) {
         if (attrs == null) {
             attrs = new HashMap<>();
         }
@@ -266,17 +266,83 @@ public class LogContext implements AutoCloseable {
     }
 
     @Nonnull
-    public LogContext trace(@Nonnull final String msg) {
-        return trace(TraceFlag.NONE, msg);
+    public LogContext append(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return add(flag, msg, false, false);
     }
 
     @Nonnull
-    public LogContext trace(@Nonnull final String msg, @Nonnull final Object... args) {
-        return trace(TraceFlag.NONE, String.format(msg, args));
+    public LogContext append(@Nonnull final String msg) {
+        return add(TraceFlag.NONE, msg, false, false);
     }
 
     @Nonnull
-    public LogContext trace(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+    public LogContext append(@Nonnull final String msg, @Nonnull final Object... args) {
+        return add(TraceFlag.NONE, String.format(msg, args), false, false);
+    }
+
+    @Nonnull
+    public LogContext append(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return add(flag, String.format(msg, args), false, false);
+    }
+
+
+
+    @Nonnull
+    public LogContext ifDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return add(flag, msg, true, false);
+    }
+
+    @Nonnull
+    public LogContext ifDebug(@Nonnull final String msg) {
+        return add(TraceFlag.NONE, msg, true, false);
+    }
+
+    @Nonnull
+    public LogContext ifDebug(@Nonnull final String msg, @Nonnull final Object... args) {
+        return add(TraceFlag.NONE, String.format(msg, args), true, false);
+    }
+
+    @Nonnull
+    public LogContext ifDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return add(flag, String.format(msg, args), true, false);
+    }
+
+
+
+    @Nonnull
+    public LogContext sensitive(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return add(flag, msg, false, true);
+    }
+
+    @Nonnull
+    public LogContext sensitive(@Nonnull final String msg) {
+        return add(TraceFlag.NONE, msg, false, true);
+    }
+
+    @Nonnull
+    public LogContext sensitive(@Nonnull final String msg, @Nonnull final Object... args) {
+        return add(TraceFlag.NONE, String.format(msg, args), false, true);
+    }
+
+    @Nonnull
+    public LogContext sensitive(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return add(flag, String.format(msg, args), false, true);
+    }
+
+
+
+
+
+
+    @Nonnull
+    private LogContext add(@Nonnull final TraceFlag flag, @Nonnull final String msg, final boolean debug, final boolean sensitive) {
+        if (debug && !output.isDebugEnabled()) {
+            return this;
+        }
+        if (sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
+            return this;
+        }
+
         if (trace == null) {
             trace = new StringBuilder(128);
         } else {
@@ -308,10 +374,7 @@ public class LogContext implements AutoCloseable {
         }
     }
 
-    @Nonnull
-    public LogContext trace(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
-        return trace(flag, String.format(msg, args));
-    }
+
 
     @Nonnull
     public LogContext pushMDC(@Nonnull final String key, @Nullable final String value) {
