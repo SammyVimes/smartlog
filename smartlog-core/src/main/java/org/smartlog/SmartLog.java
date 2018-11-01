@@ -178,6 +178,21 @@ public class SmartLog {
     }
 
     @Nonnull
+    public static LogContext sensitiveIfDebug(final String format, final Object... args) {
+        return current().sensitiveIfDebug(format, args);
+    }
+
+    @Nonnull
+    public static LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return current().sensitiveIfDebug(flag, msg);
+    }
+
+    @Nonnull
+    public static LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return current().sensitiveIfDebug(flag, msg, args);
+    }
+
+    @Nonnull
     public static LogContext result(final Object result) {
         return current().result(result);
     }

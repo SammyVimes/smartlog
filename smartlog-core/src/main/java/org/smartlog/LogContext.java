@@ -331,15 +331,37 @@ public class LogContext implements AutoCloseable {
 
 
 
+    @Nonnull
+    public LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
+        return add(flag, msg, true, true);
+    }
+
+    @Nonnull
+    public LogContext sensitiveIfDebug(@Nonnull final String msg) {
+        return add(TraceFlag.NONE, msg, true, true);
+    }
+
+    @Nonnull
+    public LogContext sensitiveIfDebug(@Nonnull final String msg, @Nonnull final Object... args) {
+        return add(TraceFlag.NONE, String.format(msg, args), true, true);
+    }
+
+    @Nonnull
+    public LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
+        return add(flag, String.format(msg, args), true, true);
+    }
+
+
+
 
 
 
     @Nonnull
     private LogContext add(@Nonnull final TraceFlag flag, @Nonnull final String msg, final boolean debug, final boolean sensitive) {
-        if (debug && !output.isDebugEnabled()) {
-            return this;
-        }
-        if (sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
+        if (debug && !output.isDebugEnabled() || sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
+            if (flag == TraceFlag.WRITE_AND_MARK_TIME || flag == TraceFlag.MARK_TIME) {
+                markTime();
+            }
             return this;
         }
 
