@@ -69,7 +69,6 @@ public class LogContext implements AutoCloseable {
     /**
      * Trace
      */
-    @Nullable
     private StringBuilder trace;
 
     /**
@@ -358,44 +357,67 @@ public class LogContext implements AutoCloseable {
 
     @Nonnull
     private LogContext add(@Nonnull final TraceFlag flag, @Nonnull final String msg, final boolean debug, final boolean sensitive) {
-        if (debug && !output.isDebugEnabled() || sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
-            if (flag == TraceFlag.WRITE_AND_MARK_TIME || flag == TraceFlag.MARK_TIME) {
-                markTime();
-            }
-            return this;
-        }
+        if (debug && !output.isDebugEnabled()
+                || sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
 
+            switch (flag) {
+                case NONE:
+                    return this;
+
+                case MARK_TIME:
+                    markTime();
+                    return this;
+
+                case WRITE_TIME:
+                case WRITE_AND_MARK_TIME:
+                    beforeMessage();
+                    addTime(flag);
+                    return this;
+                default:
+                    throw new RuntimeException("Internal error, unknown flag: " + flag);
+            }
+        } else {
+            beforeMessage();
+
+            switch (flag) {
+                case NONE:
+                    trace.append(msg);
+                    return this;
+
+                case MARK_TIME:
+                    trace.append(msg);
+                    markTime();
+                    return this;
+
+                case WRITE_TIME:
+                case WRITE_AND_MARK_TIME:
+                    trace.append(msg).append(" ");
+                    addTime(flag);
+                    return this;
+                default:
+                    throw new RuntimeException("Internal error, unknown flag: " + flag);
+            }
+        }
+    }
+
+    private void beforeMessage() {
         if (trace == null) {
             trace = new StringBuilder(128);
         } else {
             trace.append("; ");
         }
-
-        switch (flag) {
-            case NONE:
-                trace.append(msg);
-                return this;
-            case MARK_TIME:
-                trace.append(msg);
-                markTime();
-                return this;
-            case WRITE_TIME:
-            case WRITE_AND_MARK_TIME:
-                trace.append(msg)
-                        .append(" [")
-                        .append(currentTimeMillis() - timeMark)
-                        .append(" ms]");
-
-                if (flag == TraceFlag.WRITE_AND_MARK_TIME) {
-                    markTime();
-                }
-
-                return this;
-            default:
-                throw new RuntimeException("Internal error, unknown flag: " + flag);
-        }
     }
 
+    private void addTime(final @Nonnull TraceFlag flag) {
+        //noinspection ConstantConditions
+        trace.append("[")
+                .append(currentTimeMillis() - timeMark)
+                .append(" ms]");
+
+        if (flag == TraceFlag.WRITE_AND_MARK_TIME) {
+            markTime();
+        }
+    }
 
 
     @Nonnull
