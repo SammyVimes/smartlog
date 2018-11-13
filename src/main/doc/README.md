@@ -61,7 +61,7 @@ public static void example3() {
     // if log debug enabled
     SmartLog.ifDebug("debug data");
 
-    // if system property smartlog.writeSensitiveData=true
+    // system property smartlog.writeSensitiveData=true
     SmartLog.sensitive("sensitive data");
 
     SmartLog.result("custom result");
@@ -110,7 +110,7 @@ log output:
             <aspectLibrary>
                 <groupId>io.github.ivnik</groupId>
                 <artifactId>smartlog-aop</artifactId>
-                <version>0.0.6</version>
+                <version>${release.version}</version>
             </aspectLibrary>
         </aspectLibraries>
     </configuration>
