@@ -23,7 +23,7 @@ public class ExampleNoAspect {
 
             SmartLog.put("var", 5);
             SmartLog.ifDebug("debug");
-            SmartLogConfig.getConfig().setWriteSensitiveData(true);
+
             SmartLog.sensitive("sensitive data");
 
             SmartLog.result("OK");

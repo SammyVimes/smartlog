@@ -12,7 +12,7 @@ TODO
 
 ## Examples
 
-1. Simple log method call using method name, return value and total execution time
+1. Simple log method call using method name and total execution time
 ```java
 @Loggable
 public static int example1() {
@@ -58,8 +58,10 @@ public static void example3() {
     // parse
     SmartLog.append("ok");
 
+    // if log debug enabled
     SmartLog.ifDebug("debug data");
 
+    // system property smartlog.writeSensitiveData=true
     SmartLog.sensitive("sensitive data");
 
     SmartLog.result("custom result");

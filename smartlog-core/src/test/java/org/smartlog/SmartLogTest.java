@@ -58,6 +58,7 @@ public class SmartLogTest {
 
     @Test
     public void complexTest2() throws Exception {
+        System.setProperty(LogContext.WRITE_SENSITIVE_DATA_PROPERTY_NAME, "true");
         SmartLog.start(output);
 
         SmartLog.format(new SimpleTextFormat("${title} - ${result}, var=${var}, trace: [${trace}] [${time} ms]"));
@@ -73,21 +74,17 @@ public class SmartLogTest {
         SmartLog.append(TraceFlag.MARK_TIME, "trace%d", 7);
         when(logger.isDebugEnabled()).thenReturn(false);
         SmartLog.ifDebug("debug0");
-        SmartLog.sensitiveIfDebug("sensitive debug1");
-        SmartLog.sensitiveIfDebug("sensitive debug: %s", 2);
-        SmartLog.sensitiveIfDebug(TraceFlag.WRITE_TIME, "sensitive debug3");
+        SmartLog.sensitive(TraceFlag.WRITE_TIME, "sensitive no debug");
         when(logger.isDebugEnabled()).thenReturn(true);
         SmartLog.ifDebug("debug1");
         SmartLog.ifDebug("debug%s", 2);
         SmartLog.ifDebug(TraceFlag.NONE, "debug%s", 3);
         SmartLog.ifDebug(TraceFlag.WRITE_TIME, "debug4");
         SmartLog.sensitive(TraceFlag.WRITE_TIME, "sensitive1");
-        SmartLogConfig.getConfig().setWriteSensitiveData(true);
         SmartLog.sensitive("sensitive2");
         SmartLog.sensitive("sensitive%s", 3);
         SmartLog.sensitive(TraceFlag.NONE, "sensitive4");
         SmartLog.sensitive(TraceFlag.WRITE_TIME, "sensitive%s", 5);
-        SmartLog.sensitiveIfDebug(TraceFlag.WRITE_TIME, "sensitive%s", 6);
 
         SmartLog.result("test-result");
 
@@ -99,7 +96,7 @@ public class SmartLogTest {
         Mockito.verify(logger).debug(msgCaptor.capture());
 
         Assertions.assertThat(msgCaptor.getValue())
-                .matches("test-title - test-result, var=val, trace: \\[trace1; trace2; trace3; trace4 \\[\\d+ ms\\]; trace5 \\[\\d+ ms\\]; trace6; trace7; \\[\\d+ ms\\]; debug1; debug2; debug3; debug4 \\[\\d+ ms\\]; \\[\\d+ ms\\]; sensitive2; sensitive3; sensitive4; sensitive5 \\[\\d+ ms\\]; sensitive6 \\[\\d+ ms\\]\\] \\[\\d+ ms\\]");
+                .matches("test-title - test-result, var=val, trace: \\[trace1; trace2; trace3; trace4 \\[\\d+ ms\\]; trace5 \\[\\d+ ms\\]; trace6; trace7; \\[\\d+ ms\\]; debug1; debug2; debug3; debug4 \\[\\d+ ms\\]; sensitive1 \\[\\d+ ms\\]; sensitive2; sensitive3; sensitive4; sensitive5 \\[\\d+ ms\\]\\] \\[\\d+ ms\\]");
     }
 
     @Test
@@ -108,6 +105,7 @@ public class SmartLogTest {
 
         SmartLog.format(new SimpleTextFormat("${title}"));
         SmartLog.title("test-title: %d", 42);
+        SmartLog.sensitive("sensitive off");
         SmartLog.finish();
 
         final ArgumentCaptor<String> msgCaptor = ArgumentCaptor.forClass(String.class);
