@@ -2,17 +2,17 @@
 
 [![ci-travis](https://api.travis-ci.org/ivnik/smartlog.svg?branch=develop)](https://travis-ci.org/ivnik/smartlog)
 [![codecov](https://codecov.io/gh/ivnik/smartlog/branch/develop/graph/badge.svg)](https://codecov.io/gh/ivnik/smartlog)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.ivnik/smartlog.svg)](http://search.maven.org/#artifactdetails%7Cio.github.ivnik%7Csmartlog%7C0.0.3%7C)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.ivnik/smartlog.svg)](http://search.maven.org/#artifactdetails%7Cio.github.ivnik%7Csmartlog%7C0.0.6%7C)
 
 ## About
 
-Last version: 0.0.3
+Last version: 0.0.6
 
 TODO
 
 ## Examples
 
-1. Simple log method call using method name, return value and total execution time
+1. Simple log method call using method name and total execution time
 ```java
 @Loggable
 public static int example1() {
@@ -58,8 +58,10 @@ public static void example3() {
     // parse
     SmartLog.append("ok");
 
+    // if log debug enabled
     SmartLog.ifDebug("debug data");
 
+    // if system property smartlog.writeSensitiveData=true
     SmartLog.sensitive("sensitive data");
 
     SmartLog.result("custom result");
@@ -78,7 +80,7 @@ log output:
     <dependency>
         <groupId>io.github.ivnik</groupId>
         <artifactId>smartlog</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.6</version>
     </dependency>
 </dependencies>
 ```
@@ -93,7 +95,7 @@ log output:
     <dependency>
         <groupId>io.github.ivnik</groupId>
         <artifactId>smartlog</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.6</version>
     </dependency>
 </dependencies>
 <plugin>
@@ -108,7 +110,7 @@ log output:
             <aspectLibrary>
                 <groupId>io.github.ivnik</groupId>
                 <artifactId>smartlog-aop</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.6</version>
             </aspectLibrary>
         </aspectLibraries>
     </configuration>

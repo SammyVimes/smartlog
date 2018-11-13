@@ -64,7 +64,7 @@ public class LogAspectTest {
         final LogContext ctx = ctxCaptor.getValue();
         assertThat(ctx.title()).isEqualTo("log1UseMethodNameAsTitle");
         assertThat(ctx.level()).isEqualTo(LogLevel.INFO);
-        assertThat(ctx.result()).isNull();
+        assertThat(ctx.result()).isEqualTo("ok");
     }
 
     @Test
@@ -105,7 +105,7 @@ public class LogAspectTest {
         verify(output).write(ctxCaptor.capture());
 
         final LogContext ctx = ctxCaptor.getValue();
-        assertThat(ctx.result()).isEqualTo(42);
+        assertThat(ctx.result()).isEqualTo("ok");
     }
 
     @Test

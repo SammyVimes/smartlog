@@ -41,7 +41,7 @@ public class LogAspect {
     public void afterReturiningLoggable(final JoinPoint joinPoint, final Object ret) throws Throwable {
         final LogContext ctx = SmartLog.current();
         if (ctx.result() == null) {
-            ctx.result(ret);
+            ctx.result(SmartLog.DEFAULT_RESULT);
         }
         finish(joinPoint, ctx);
     }

@@ -9,6 +9,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class SmartLog {
+    public static final String DEFAULT_RESULT = "ok";
     private static final ThreadLocal<Deque<LogContext>> CONTEXTS = ThreadLocal.withInitial(LinkedList::new);
 
     @Nonnull
@@ -175,26 +176,6 @@ public class SmartLog {
     @Nonnull
     public static LogContext sensitive(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
         return current().sensitive(flag, msg, args);
-    }
-
-    @Nonnull
-    public static LogContext sensitiveIfDebug(final String msg) {
-        return current().sensitiveIfDebug(msg);
-    }
-
-    @Nonnull
-    public static LogContext sensitiveIfDebug(final String format, final Object... args) {
-        return current().sensitiveIfDebug(format, args);
-    }
-
-    @Nonnull
-    public static LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
-        return current().sensitiveIfDebug(flag, msg);
-    }
-
-    @Nonnull
-    public static LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
-        return current().sensitiveIfDebug(flag, msg, args);
     }
 
     @Nonnull

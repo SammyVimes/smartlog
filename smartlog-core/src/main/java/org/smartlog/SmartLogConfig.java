@@ -26,8 +26,6 @@ public class SmartLogConfig {
 
     private boolean replaceCrLf = true;
 
-    private boolean writeSensitiveData = Boolean.getBoolean("smartlog.writeSensitiveData");
-
     private Function<Class, Output> defaultOutputResolver = (clazz) -> Slf4JOutput.create()
             .withLoggerFor(clazz)
             .build();
@@ -50,14 +48,6 @@ public class SmartLogConfig {
 
     public boolean isReplaceCrLf() {
         return replaceCrLf;
-    }
-
-    public boolean isWriteSensitiveData() {
-        return writeSensitiveData;
-    }
-
-    public void setWriteSensitiveData(final boolean writeSensitiveData) {
-        this.writeSensitiveData = writeSensitiveData;
     }
 
     public void setReplaceCrLf(final boolean replaceCrLf) {

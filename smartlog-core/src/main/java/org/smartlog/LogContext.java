@@ -16,6 +16,9 @@ import static java.lang.System.currentTimeMillis;
  */
 @NotThreadSafe
 public class LogContext implements AutoCloseable {
+
+    public static final String WRITE_SENSITIVE_DATA_PROPERTY_NAME = "smartlog.writeSensitiveData";
+
     private final long startTime = currentTimeMillis();
     private long endTime = 0;
 
@@ -88,6 +91,8 @@ public class LogContext implements AutoCloseable {
      */
     @Nullable
     private String oldThreadName;
+
+    private final boolean writeSensitiveData = Boolean.getBoolean(WRITE_SENSITIVE_DATA_PROPERTY_NAME);
 
     protected LogContext(@Nonnull final Output output) {
         this.output = output;
@@ -330,35 +335,12 @@ public class LogContext implements AutoCloseable {
 
 
 
-    @Nonnull
-    public LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg) {
-        return add(flag, msg, true, true);
-    }
-
-    @Nonnull
-    public LogContext sensitiveIfDebug(@Nonnull final String msg) {
-        return add(TraceFlag.NONE, msg, true, true);
-    }
-
-    @Nonnull
-    public LogContext sensitiveIfDebug(@Nonnull final String msg, @Nonnull final Object... args) {
-        return add(TraceFlag.NONE, String.format(msg, args), true, true);
-    }
-
-    @Nonnull
-    public LogContext sensitiveIfDebug(@Nonnull final TraceFlag flag, @Nonnull final String msg, @Nonnull final Object... args) {
-        return add(flag, String.format(msg, args), true, true);
-    }
-
-
-
-
 
 
     @Nonnull
     private LogContext add(@Nonnull final TraceFlag flag, @Nonnull final String msg, final boolean debug, final boolean sensitive) {
         if (debug && !output.isDebugEnabled()
-                || sensitive && !SmartLogConfig.getConfig().isWriteSensitiveData()) {
+                || sensitive && !(writeSensitiveData && output.isDebugEnabled())) {
 
             switch (flag) {
                 case NONE:
